@@ -22,11 +22,18 @@ module "helm" {
 
 }
 
+module "irsa" {
+  source                  = "./modules/irsa"
+  cluster_oidc_issuer_url = data.terraform_remote_state.infra.outputs.cluster_oidc_issuer_url
+  oidc_provider_arn       = data.terraform_remote_state.infra.outputs.oidc_provider_arn
+}
+
 resource "kubernetes_namespace_v1" "challenge-namespace" {
   metadata {
     name = var.namespace_name
   }
 }
+
 
 resource "helm_release" "podinfo" {
   name       = "podinfo"
@@ -38,6 +45,12 @@ resource "helm_release" "podinfo" {
     file("${path.module}/custom-values.yaml"),
 
     yamlencode({
+
+      serviceAccount = {
+        create = false
+        name   = "kubernetes-service-account_v1.podinfo_sa.metadata[0].name"
+      }
+
       service = {
         type = "ClusterIP"
       }

@@ -1,9 +1,10 @@
 resource "helm_release" "aws_load_balancer_controller" {
-  name       = "aws-load-balancer-controller"
-  repository = "https://aws.github.io/eks-charts"
-  chart      = "aws-load-balancer-controller"
-  namespace  = "web-production"
-  version    = "1.8.1"
+  name = "aws-load-balancer-controller"
+  #repository = "https://aws.github.io/eks-charts"
+  #chart      = "aws-load-balancer-controller"
+  chart     = "./aws-load-balancer-controller"
+  namespace = "web-production"
+  version   = "1.8.1"
 
   values = [
     yamlencode({

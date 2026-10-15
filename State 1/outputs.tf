@@ -32,3 +32,8 @@ output "public_subnets" {
   value       = module.networking.public_subnets
   description = "The IDs of the public subnets"
 }
+
+output "cluster_oidc_issuer_url" {
+  value       = module.eks.cluster_oidc_issuer_url
+  description = "The OIDC issuer URL of the EKS cluster"
+}
